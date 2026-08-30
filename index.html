@@ -237,6 +237,15 @@ input[type=range]:focus-visible{outline:2px solid var(--c-blue);outline-offset:4
 .verdict[data-state="most"]{--vc:var(--role-human)}
 .verdict[data-state="open"]{--vc:var(--ink)}
 .verdict .v-title{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px;color:var(--ink)}
+/* the three pillars, composited. ink, not hue: this is a measurement, not a
+   status, and structure stays ink. */
+.pillars{border-top:1px solid var(--line);margin-top:6px;padding-top:13px}
+.pill-bar{display:flex;height:8px;border:2px solid var(--ink);margin-top:7px}
+.pill-bar span{display:block;background:var(--ink);transition:width calc(var(--beat)/2) var(--ease-snap)}
+/* the point of the chapter: this number moves and the verdict does not */
+.v-lock{font-size:12px;color:var(--muted);line-height:1.45;border-top:1px solid var(--line);margin-top:13px;padding-top:11px}
+.v-lock b{color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums}
+
 /* count of capabilities held, as a four-step meter */
 .meter{display:flex;gap:3px;margin-bottom:11px}
 .meter span{height:8px;flex:1;border:2px solid var(--muted)}
@@ -714,6 +723,11 @@ footer li a:hover{color:var(--hue);text-decoration:none}
         <input type="range" min="10" max="100" value="80" id="sChp">
       </div>
 
+      <div class="pillars">
+        <div class="ctl-label"><span>Three pillars</span><span class="fig" id="vPillars">85</span></div>
+        <div class="pill-bar"><span id="pillBar" style="width:85%"></span></div>
+      </div>
+
       <div class="checks" id="caps">
         <label class="chk"><input type="checkbox" data-cap="Observability"><i></i>Observability</label>
         <label class="chk"><input type="checkbox" data-cap="Traceability"><i></i>Traceability</label>
@@ -727,6 +741,7 @@ footer li a:hover{color:var(--hue);text-decoration:none}
         <div class="v-title" id="vTitle">Not adoptable</div>
         <p class="v-body" id="vBody">Fast, accurate, cheap, and unable to show its work. In legal, the unprovable work is the one that hurts.</p>
         <div class="v-meta" id="vMeta">Time to first audit failure: months, not years</div>
+        <div class="v-lock">Three pillars at <b id="vLockNum">85</b>. Category membership is set by the four capabilities alone.</div>
       </div>
     </section>
 
@@ -1053,9 +1068,21 @@ function renderGate(){
   $$('#meter span').forEach((s,i) => s.dataset.on = i < n ? '1' : '0');
 }
 caps.forEach(c => c.addEventListener('change', renderGate));
+// the three pillars composite. it moves; the verdict does not. that is the
+// chapter's argument, so the number is shown rather than left implicit.
+function renderPillars(){
+  const v = Math.round((+sliders.fast.value + +sliders.acc.value + +sliders.chp.value) / 3);
+  $('#vPillars').textContent = v;
+  $('#vLockNum').textContent = v;
+  $('#pillBar').style.width = v + '%';
+}
 Object.keys(sliders).forEach(k => {
-  sliders[k].addEventListener('input', () => { outs[k].textContent = sliders[k].value; });
+  sliders[k].addEventListener('input', () => {
+    outs[k].textContent = sliders[k].value;
+    renderPillars();
+  });
 });
+renderPillars();
 renderGate();
 
 /* ── 3. Timeline ── */
