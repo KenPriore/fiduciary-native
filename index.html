@@ -1,0 +1,1374 @@
+<!DOCTYPE html>
+<html lang="en" data-lane="proof">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Fiduciary-Native Product · Interactive Explainer</title>
+<meta name="description" content="Why defensibility is the fourth non-negotiable requirement for legal AI.">
+<meta property="og:title" content="The Fiduciary-Native Product">
+<meta property="og:description" content="Why defensibility is the fourth non-negotiable requirement for legal AI.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://fiduciary.kenpriore.ai/">
+<meta name="twitter:card" content="summary">
+
+<!--
+  The Fiduciary-Native Product · fiduciary.kenpriore.ai
+  Ken Priore, 2026. One self-contained file. No build step.
+  The digest in the sandbox is computed with SubtleCrypto over the
+  payload shown, so it can be recomputed and checked.
+-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ─── 1. Signal v2 tokens ─── */
+:root{
+  --paper:#FFFFFF; --ink:#0A0A0A; --ink-soft:#333333; --muted:#6B6B6B;
+  --line:#D9D9D9; --line-firm:var(--ink); --fill-soft:#F4F4F4;
+
+  --c-red:#FF0000; --c-blue:#0057B8; --c-yellow:#FFCC00;
+
+  --ill-slate:#4A6FA5; --ill-orange:#FF7F50; --ill-sage:#7CA982;
+  --ill-mustard:#D4A24C; --ill-rose:#C76B7E;
+
+  --container:1180px; --measure:720px; --inset:clamp(20px,5vw,72px);
+  --sans:"Archivo","Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
+  --mono:"SFMono-Regular","SF Mono",Consolas,"Liberation Mono",Menlo,monospace;
+  --beat:480ms;
+  --ease-cut:cubic-bezier(0.2,0.7,0.2,1);
+  --ease-snap:cubic-bezier(0.2,0,0,1);
+
+  /* displacement roles: machine / in transition / held by a human */
+  --role-machine:var(--c-red);
+  --role-transition:var(--c-yellow);
+  --role-human:var(--c-blue);
+}
+/* HUE LAW — one accent per surface, set only by lane */
+[data-lane="proof"]{--hue:var(--ill-mustard)}
+
+/* PER-SECTION HUE MAPPING. the reading column carries
+   narrative hues for wayfinding; the workspace carries signal primaries for
+   state. two registers, never mixed in one element.
+     mustard  value / deliberation — the proof lane's own hue
+     slate    analysis / governance
+     orange   building / action
+     sage     careful work / gathering
+     rose     human stakes / care                                        */
+[data-hue="mustard"]{--hue:var(--ill-mustard)}
+[data-hue="slate"]  {--hue:var(--ill-slate)}
+[data-hue="orange"] {--hue:var(--ill-orange)}
+[data-hue="sage"]   {--hue:var(--ill-sage)}
+[data-hue="rose"]   {--hue:var(--ill-rose)}
+
+*{margin:0;padding:0;box-sizing:border-box;border-radius:0 !important}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--sans); background:var(--paper); color:var(--ink);
+  font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--c-blue);text-decoration:none}
+a:hover{text-decoration:underline;text-decoration-thickness:2px}
+.container{max-width:var(--container);margin:0 auto;padding:0 var(--inset)}
+.num,time,.fig{font-variant-numeric:tabular-nums}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ─── 2. Type ─── */
+.kicker{
+  font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);display:flex;align-items:center;gap:10px;
+}
+.kicker b{color:var(--ink);font-weight:700}
+.poster{font-size:clamp(44px,6.8vw,92px);font-weight:800;letter-spacing:-.02em;line-height:.95}
+.poster em{font-style:normal;color:var(--c-blue)}
+h2.ch-title{font-size:clamp(30px,4.5vw,52px);font-weight:800;letter-spacing:-.02em;line-height:1.04}
+h3{font-size:clamp(20px,2.4vw,26px);font-weight:800;letter-spacing:-.02em;line-height:1.14}
+h4{font-size:15px;font-weight:800;letter-spacing:-.01em}
+.prose{font-size:16px;line-height:1.55;color:var(--ink-soft);max-width:66ch}
+.prose + .prose{margin-top:16px}
+.prose strong{color:var(--ink);font-weight:800}
+.small{font-size:13px;color:var(--muted);line-height:1.45}
+
+/* the epigraph — replaces the serif italic. poster weight + hue tick */
+.epigraph{margin:0 0 28px;border-left:6px solid var(--hue);padding-left:18px}
+.epigraph .tick{display:none}
+.epigraph p{font-size:clamp(19px,2.2vw,24px);font-weight:800;letter-spacing:-.02em;line-height:1.18;max-width:30ch}
+
+/* ─── 3. Masthead ─── */
+header.mast{
+  position:sticky;top:0;z-index:50;background:var(--paper);
+  border-bottom:4px solid var(--line-firm);
+}
+/* longhand only — the shorthand would zero .container's horizontal inset */
+.mast-in{display:flex;align-items:center;gap:20px;padding-top:16px;padding-bottom:16px;flex-wrap:wrap}
+.wm{display:flex;align-items:center;gap:12px;margin-right:auto}
+.wm svg{width:30px;height:30px;flex:none}
+.wm-name{font-weight:800;letter-spacing:-.01em;font-size:15px;line-height:1.1;text-transform:uppercase}
+.wm-sub{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:3px}
+nav.ch-nav{display:flex;gap:20px;flex-wrap:wrap}
+nav.ch-nav a{
+  font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink);border-bottom:2px solid transparent;padding-bottom:3px;
+  transition:border-color calc(var(--beat)/2) var(--ease-snap),color calc(var(--beat)/2) var(--ease-snap);
+}
+nav.ch-nav a:hover{text-decoration:none;border-bottom-color:var(--hue)}
+nav.ch-nav a[aria-current="true"]{border-bottom-color:var(--hue)}
+
+/* ─── 4. Poster hero ─── */
+.hero{padding:clamp(44px,7vw,96px) 0 0}
+.hero .kicker{margin-bottom:22px}
+.hero-rule{width:120px;height:6px;background:var(--hue);margin:30px 0 0}
+.wipe{clip-path:inset(0 100% 0 0);animation:wipe calc(var(--beat)*1.5) var(--ease-cut) forwards}
+@keyframes wipe{to{clip-path:inset(0 0 0 0)}}
+
+/* ─── 5. Mark band ─── */
+.markband{
+  display:grid;grid-template-columns:repeat(6,1fr);
+  border-top:4px solid var(--line-firm);border-bottom:2px solid var(--line-firm);
+  margin-top:clamp(40px,6vw,72px);
+}
+.markband div{
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  padding:22px 8px;border-left:1px solid var(--line);
+}
+.markband div:first-child{border-left:0}
+/* each mark carries its chapter's hue — the band is the legend for the essay */
+.markband div{border-top:6px solid var(--hue);margin-top:-1px}
+.markband svg{width:44px;height:44px;color:var(--ink);--signal:var(--hue)}
+.markband span{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);text-align:center}
+.markband a{color:inherit;display:contents}
+.markband div:hover{background:color-mix(in srgb,var(--hue) 10%,transparent)}
+.markband .pt{font-size:9px;letter-spacing:.18em;color:var(--hue);font-weight:700;font-variant-numeric:tabular-nums}
+
+/* ─── 6. The split ─── */
+main.split{
+  display:grid;grid-template-columns:7fr 5fr;gap:0;
+  border-top:0;align-items:start;
+}
+.read{padding:clamp(36px,5vw,64px) clamp(28px,4vw,56px) 0 0;min-width:0}
+.work{
+  position:sticky;top:96px;border-left:2px solid var(--line-firm);
+  padding:clamp(36px,5vw,64px) 0 40px clamp(28px,4vw,56px);
+  min-width:0;
+  /* bounded so a tall panel (ch.6 after sealing) can never push its own
+     head off-screen. the reading column stays in normal page flow. */
+  max-height:calc(100vh - 104px);overflow-y:auto;overscroll-behavior:contain;
+}
+.chapter{padding-bottom:clamp(56px,8vw,104px)}
+/* the sticky workspace un-sticks when its container ends. the runway has to be
+   TRAILING SPACE, not total height — growing the chapter pushes the container
+   bottom and the un-stick point down by the same amount, so min-height never
+   catches up. this is the space the workspace travels through. */
+.chapter:last-of-type{padding-bottom:calc(100vh - 40px)}
+/* the chapter's hue is stated once, loud, at its head */
+.chapter-head{border-top:4px solid var(--hue);padding-top:20px;margin-bottom:26px}
+.chapter-head .kicker{margin-bottom:14px}
+.chapter-head .kicker b{color:var(--hue)}
+.chapter-head .kicker .rule{flex:1;height:2px;background:var(--line)}
+.chapter-head .kicker .reg{color:var(--muted);letter-spacing:.22em}
+.pullbox{border-top:4px solid var(--hue);padding-top:16px;margin:26px 0;max-width:60ch}
+.pullbox p{font-size:19px;font-weight:800;letter-spacing:-.02em;line-height:1.22}
+.prose strong{color:var(--ink);font-weight:800;box-shadow:inset 0 -8px 0 -1px color-mix(in srgb,var(--hue) 26%,transparent)}
+
+/* ─── 7. Workspace shell ─── */
+/* the workspace picks up the active chapter's hue — the strongest
+   "where am I" signal on the page, and it moves as you read */
+.work-bar{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border-top:6px solid var(--hue);border-bottom:2px solid var(--line-firm);
+  padding:12px 0 10px;margin-bottom:20px;
+}
+.work-bar .kicker b{color:var(--hue)}
+
+/* state legend — teaches the signal register once, at the foot */
+.legend{border-top:1px solid var(--line);margin-top:20px;padding-top:12px;display:grid;gap:6px}
+.legend div{display:flex;align-items:center;gap:9px;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.legend i{width:11px;height:11px;flex:none;display:block;border:2px solid currentColor}
+.legend .l-human i{background:var(--role-human);border-color:var(--role-human)}
+.legend .l-caution i{background:var(--role-transition);border-color:var(--role-transition)}
+.legend .l-off i{border-color:var(--muted);background:none}
+.panel{display:none}
+.panel.on{display:block;animation:wipe calc(var(--beat)) var(--ease-cut) forwards}
+.w-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:6px}
+.w-instr{font-size:13px;color:var(--muted);line-height:1.45;margin-bottom:20px;max-width:52ch}
+.w-block{border:2px solid var(--line-firm);padding:18px;margin-top:18px}
+.w-block--soft{border:1px solid var(--line);background:var(--fill-soft)}
+
+/* controls */
+.ctl{margin-bottom:16px}
+.ctl-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px}
+.ctl-label span:first-child{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.ctl-label span:last-child{font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:14px;background:transparent;cursor:pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{height:4px;background:var(--line);border:0}
+input[type=range]::-moz-range-track{height:4px;background:var(--line);border:0}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:14px;height:14px;background:var(--ink);margin-top:-5px;border:0;
+}
+input[type=range]::-moz-range-thumb{width:14px;height:14px;background:var(--ink);border:0;border-radius:0}
+input[type=range]:focus-visible{outline:2px solid var(--c-blue);outline-offset:4px}
+
+.checks{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);margin-top:18px}
+.chk{
+  display:flex;align-items:center;gap:9px;padding:11px 12px;cursor:pointer;
+  border-left:1px solid var(--line);border-top:1px solid var(--line);
+  font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+  transition:background calc(var(--beat)/2) var(--ease-snap);
+}
+.chk:nth-child(-n+2){border-top:0}
+.chk:nth-child(odd){border-left:0}
+.chk:hover{background:var(--fill-soft)}
+.chk i{width:13px;height:13px;border:2px solid var(--muted);flex:none;display:block}
+/* a checked capability is one a human can hold someone to — role-human blue */
+.chk.on i{background:var(--role-human);border-color:var(--role-human)}
+.chk.on{color:var(--ink);box-shadow:inset 3px 0 0 var(--role-human)}
+.chk{color:var(--muted)}
+.chk input{position:absolute;opacity:0;width:0;height:0}
+
+/* verdict */
+.verdict{--vc:var(--ink);border-top:6px solid var(--vc);padding:14px 14px 14px 0;margin-top:22px;
+  background:linear-gradient(to right,color-mix(in srgb,var(--vc) 9%,transparent),transparent 62%);
+  padding-left:14px;transition:background calc(var(--beat)/2) var(--ease-snap)}
+.verdict[data-state="closed"]{--vc:var(--role-machine)}
+.verdict[data-state="pilot"]{--vc:var(--role-transition)}
+.verdict[data-state="most"]{--vc:var(--role-human)}
+.verdict[data-state="open"]{--vc:var(--ink)}
+.verdict .v-title{font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.1;margin-bottom:8px;color:var(--ink)}
+/* count of capabilities held, as a four-step meter */
+.meter{display:flex;gap:3px;margin-bottom:11px}
+.meter span{height:8px;flex:1;border:2px solid var(--muted)}
+.meter span[data-on="1"]{background:var(--role-human);border-color:var(--role-human)}
+.verdict .v-body{font-size:13px;color:var(--ink-soft);line-height:1.5;max-width:46ch}
+.verdict .v-meta{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+
+/* tabs */
+.tabs{display:flex;border-bottom:4px solid var(--line);margin-bottom:18px}
+.tab{
+  flex:1;background:none;border:0;cursor:pointer;font-family:inherit;text-align:left;
+  padding:9px 10px 11px;margin-bottom:-4px;border-bottom:4px solid transparent;
+  font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  transition:color calc(var(--beat)/2) var(--ease-snap),border-color calc(var(--beat)/2) var(--ease-snap);
+}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--hue)}
+.tab .yr{display:block;font-size:10px;letter-spacing:.1em;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+
+/* era comparison — the restored Primary Risk column */
+table.era{width:100%;border-collapse:collapse;margin-top:20px;font-size:12px}
+table.era th{
+  text-align:left;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);border-bottom:2px solid var(--ink);padding:0 10px 7px 0;
+}
+table.era td{border-bottom:1px solid var(--line);padding:10px 10px 10px 0;vertical-align:top;color:var(--ink-soft)}
+table.era tr[data-on="1"] td{color:var(--ink);background:color-mix(in srgb,var(--hue) 12%,transparent)}
+table.era tr[data-on="1"] td:first-child{box-shadow:inset 6px 0 0 var(--hue);padding-left:12px}
+table.era td:first-child{font-weight:800;color:var(--ink)}
+/* era 4 is the live era. red means live or changed right now. */
+table.era .live{display:inline-block;width:7px;height:7px;background:var(--role-machine);margin-right:7px;
+  animation:tick calc(var(--beat)*2) steps(1) infinite}
+table.era td:last-child{color:var(--muted)}
+table.era tr[data-on="1"] td:last-child{color:var(--ink-soft)}
+
+/* stack — depth by rule weight, not tint */
+.stack-row{
+  display:flex;align-items:baseline;gap:12px;padding:13px 0 13px 14px;cursor:pointer;
+  background:none;border:0;width:100%;text-align:left;font-family:inherit;
+  border-top:1px solid var(--line);
+  transition:background calc(var(--beat)/2) var(--ease-snap);
+}
+.stack-row:hover{background:var(--fill-soft)}
+/* depth = rule weight; the hue marks how far upstream the work sits */
+.stack-row[data-w="1"]{border-left:2px solid var(--line)}
+.stack-row[data-w="2"]{border-left:4px solid color-mix(in srgb,var(--hue) 45%,var(--line))}
+.stack-row[data-w="3"]{border-left:6px solid color-mix(in srgb,var(--hue) 75%,var(--line))}
+.stack-row[data-w="4"]{border-left:8px solid var(--hue)}
+.stack-row[aria-selected="true"]{background:color-mix(in srgb,var(--hue) 11%,transparent)}
+.stack-row[aria-selected="true"] .sn{color:var(--ink)}
+.stack-row .sn{font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--muted);font-variant-numeric:tabular-nums;flex:none}
+.stack-row .st{font-size:15px;font-weight:800;letter-spacing:-.01em;flex:1}
+.stack-row .sp{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+pre.code{
+  font-family:var(--mono);font-size:12px;line-height:1.6;background:var(--fill-soft);
+  border-left:3px solid var(--hue);padding:12px 14px;margin-top:12px;overflow-x:auto;white-space:pre-wrap;
+}
+
+/* rings — the loop house-mark at scale */
+.rings{display:flex;justify-content:center;padding:4px 0 0}
+.rings svg{width:100%;max-width:290px;height:auto;color:var(--ink)}
+.rings .node{cursor:pointer}
+.rings .node circle{transition:fill calc(var(--beat)/2) var(--ease-snap)}
+.node-list{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:46px;gap:0;border:1px solid var(--line);margin-top:16px}
+.node-list button{
+  background:none;border:0;border-left:1px solid var(--line);border-top:1px solid var(--line);
+  font-family:inherit;text-align:left;cursor:pointer;padding:9px 10px;
+  font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+  display:flex;align-items:center;gap:8px;min-height:44px;line-height:1.25;
+  transition:background calc(var(--beat)/2) var(--ease-snap),color calc(var(--beat)/2) var(--ease-snap);
+}
+.node-list button:nth-child(-n+2){border-top:0}
+.node-list button:nth-child(odd){border-left:0}
+.node-list button:hover{background:var(--fill-soft)}
+.node-list button[aria-pressed="true"]{color:var(--ink)}
+.node-list i{width:9px;height:9px;border:2px solid var(--muted);flex:none;display:block}
+.node-list button[aria-pressed="true"] i{background:var(--hue);border-color:var(--hue)}
+.node-list button[aria-pressed="true"]{box-shadow:inset 3px 0 0 var(--hue)}
+.node-list .rr{margin-left:auto;font-size:9px;letter-spacing:.14em;color:var(--muted)}
+/* inner-ring channels are the structured ones — heavier mark */
+.node-list button[data-ring="inner"] i{width:11px;height:11px}
+.cov-bar{display:flex;height:10px;border:2px solid var(--ink);margin:14px 0 0}
+.cov-bar span{display:block;background:var(--hue);transition:width calc(var(--beat)/2) var(--ease-snap)}
+.cov-note{display:flex;justify-content:space-between;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* duties */
+.duty{
+  display:block;width:100%;text-align:left;font-family:inherit;cursor:pointer;
+  border:0;border-top:1px solid var(--line);background:none;padding:12px 0 12px 14px;
+  transition:background calc(var(--beat)/2) var(--ease-snap);
+}
+.duty:hover{background:var(--fill-soft)}
+.duty[aria-selected="true"]{background:color-mix(in srgb,var(--hue) 12%,transparent);box-shadow:inset 6px 0 0 var(--hue)}
+.duty[aria-selected="true"] .ds{color:var(--hue)}
+/* both were inline spans, so margin-top did nothing and the name ran straight
+   into the spec label — "LoyaltyAUTHORITY BINDING" */
+.duty .dn{display:block;font-size:15px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.duty .ds{display:block;font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:5px}
+.split2{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:18px;border:2px solid var(--line-firm)}
+.split2 > div{padding:14px}
+.split2 > div + div{border-left:1px solid var(--line)}
+.split2 .kicker{margin-bottom:9px}
+/* two vocabularies for one obligation — the chapter's whole point, in colour */
+.split2 > div:first-child{border-top:6px solid var(--hue)}
+.split2 > div:first-child .kicker{color:var(--hue)}
+.split2 > div:last-child{border-top:6px solid var(--role-human)}
+.split2 > div:last-child .kicker{color:var(--role-human)}
+
+/* sandbox */
+.selects{display:grid;gap:12px}
+.sel label{display:block;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.sel select{
+  width:100%;font-family:inherit;font-size:13px;font-weight:700;color:var(--ink);
+  background:var(--paper);border:1px solid var(--ink);padding:9px 10px;cursor:pointer;
+  appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink) 50%),linear-gradient(135deg,var(--ink) 50%,transparent 50%);
+  background-position:calc(100% - 15px) 50%,calc(100% - 10px) 50%;
+  background-size:5px 5px,5px 5px;background-repeat:no-repeat;
+}
+.sel select:focus-visible{outline:2px solid var(--c-blue);outline-offset:2px}
+.btn{
+  font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  padding:13px 22px;border:2px solid var(--line-firm);background:var(--paper);color:var(--ink);cursor:pointer;
+  transition:background calc(var(--beat)/2) var(--ease-snap),color calc(var(--beat)/2) var(--ease-snap);
+}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn--sm{padding:8px 14px;font-size:11px}
+.btn:disabled{color:var(--muted);border-color:var(--line);cursor:default}
+.btn:disabled:hover{background:var(--paper);color:var(--muted)}
+
+/* a log tails. bounded, and it yields the surface to the receipt on seal. */
+.term{background:var(--ink);color:var(--paper);padding:14px;margin-top:18px;
+  min-height:190px;max-height:224px;overflow-y:auto;overscroll-behavior:contain}
+.term-bar{
+  position:sticky;top:-14px;background:var(--ink);z-index:1;
+  display:flex;align-items:center;gap:9px;border-bottom:1px solid #2E2E2E;padding:0 0 9px;margin-bottom:11px;
+  font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#8F8F8C;
+}
+/* THE one red element on this screen */
+.live-dot{width:8px;height:8px;background:var(--c-red);flex:none;animation:tick calc(var(--beat)*2) steps(1) infinite}
+@keyframes tick{0%{opacity:1}50%{opacity:.25}100%{opacity:1}}
+.term ol{list-style:none;font-family:var(--mono);font-size:11.5px;line-height:1.75}
+.term li{color:#CFCFCC}
+.term li[data-k="warn"]{color:var(--c-yellow)}
+.term li[data-k="ok"]{color:#8FB8E8}
+.term li .t{color:#6B6B6B;margin-right:8px}
+
+.cert{border:2px solid var(--line-firm);margin-top:18px;animation:wipe var(--beat) var(--ease-cut) forwards}
+.cert-top{border-bottom:2px solid var(--line-firm);padding:13px 14px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.cert-body{padding:14px}
+.cert h4{margin-bottom:3px}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:11.5px;margin-top:12px}
+.kv dt{font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-size:10px;padding-top:2px}
+.kv dd{font-family:var(--mono);font-variant-numeric:tabular-nums;line-height:1.55;overflow-wrap:break-word}
+.kv dd.hash{word-break:break-all}   /* a digest has no word boundaries */
+.kv dd details summary{cursor:pointer;font-family:var(--sans);font-size:10px;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--c-blue);margin-bottom:8px}
+.kv dd details[open] summary{color:var(--muted)}
+.duty-check{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--line);margin-top:14px}
+.duty-check div{padding:9px 10px;border-left:1px solid var(--line);border-top:1px solid var(--line);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.duty-check div:nth-child(-n+2){border-top:0}
+.duty-check div:nth-child(odd){border-left:0}
+.duty-check i{width:11px;height:11px;flex:none;border:2px solid var(--ink);display:block}
+/* met = a human can be held to it (blue). unmet = caution (yellow). */
+.duty-check div[data-met="1"] i{background:var(--role-human);border-color:var(--role-human)}
+.duty-check div[data-met="1"]{box-shadow:inset 3px 0 0 var(--role-human)}
+.duty-check div[data-met="0"]{color:var(--ink-soft);box-shadow:inset 3px 0 0 var(--role-transition)}
+.duty-check div[data-met="0"] i{border-color:var(--role-transition);
+  background:repeating-linear-gradient(45deg,var(--role-transition),var(--role-transition) 2px,transparent 2px,transparent 4px)}
+/* an incomplete receipt is a CAUTION, not a live-machine state, so it takes
+   transition yellow. red stays with the live dot alone — which also survives
+   "Show log" putting the terminal back on screen beside this flag. */
+.cert-flag{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  padding:4px 9px;border:2px solid var(--role-transition);color:var(--ink);
+  background:color-mix(in srgb,var(--role-transition) 22%,transparent)}
+.cert-flag[data-ok="1"]{border-color:var(--role-human);color:var(--role-human);background:none}
+.cert-top{flex-wrap:wrap}
+
+/* chapter ledger in the workspace foot */
+.ledger{border-top:2px solid var(--line-firm);margin-top:26px;padding-top:12px;display:flex;gap:6px;flex-wrap:wrap}
+/* each chip carries its chapter's hue — the arc of the essay, at a glance */
+.ledger a{
+  font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);
+  border:1px solid var(--line);border-top:4px solid var(--hue);padding:5px 9px;
+  font-variant-numeric:tabular-nums;
+  transition:background calc(var(--beat)/2) var(--ease-snap),color calc(var(--beat)/2) var(--ease-snap);
+}
+.ledger a:hover{text-decoration:none;color:var(--ink);background:color-mix(in srgb,var(--hue) 16%,transparent)}
+.ledger a[aria-current="true"]{color:var(--paper);background:var(--hue);border-color:var(--hue)}
+
+/* ─── 8. Coda + sources + footer ─── */
+.coda{border-top:4px solid var(--line-firm);padding:clamp(40px,6vw,80px) 0 0;margin-top:20px}
+.coda-grid{display:grid;grid-template-columns:7fr 5fr;gap:clamp(28px,4vw,56px);align-items:start}
+.sources{border-top:2px solid var(--line-firm);margin-top:clamp(40px,6vw,72px);padding-top:26px}
+.src-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border-top:1px solid var(--line);margin-top:18px}
+.src{padding:16px 18px 16px 0;border-bottom:1px solid var(--line)}
+.src:nth-child(even){padding-left:18px;border-left:1px solid var(--line)}
+.src .cite{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.src a{font-size:15px;font-weight:800;letter-spacing:-.01em;color:var(--ink)}
+.src a:hover{color:var(--hue);text-decoration:none}
+.src p{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-top:6px;max-width:44ch}
+
+/* ─── footer: shared with kenpriore.ai ─── */
+footer{border-top:4px solid var(--line-firm);padding:48px 0 64px;margin-top:72px}
+.foot-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+@media(max-width:900px){.foot-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.foot-grid{grid-template-columns:1fr}}
+.foot-col .kicker{margin-bottom:12px;padding-top:10px}
+.foot-col--read .kicker{border-top:4px solid var(--ill-slate)}
+.foot-col--interactive .kicker{border-top:4px solid var(--ill-orange)}
+.foot-col--record .kicker{border-top:4px solid var(--ill-mustard)}
+.foot-col--follow .kicker{border-top:4px solid var(--ill-rose)}
+footer li{list-style:none;padding:5px 0;font-size:14px}
+footer li a{color:var(--ink)}
+footer li a:hover{color:var(--hue);text-decoration:none}
+.colophon{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);font-size:11px;letter-spacing:.06em;color:var(--muted);text-transform:uppercase;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.colophon a{color:inherit}
+.colophon a:hover{color:var(--hue);text-decoration:none}
+
+/* ─── 9. Responsive ─── */
+@media (max-width:1080px){
+  .markband{grid-template-columns:repeat(3,1fr)}
+  .markband div:nth-child(4){border-left:0}
+  .markband div:nth-child(-n+3){border-bottom:1px solid var(--line)}
+}
+@media (max-width:880px){
+  main.split{grid-template-columns:1fr}
+  .read{padding-right:0}
+  .work{
+    position:static;border-left:0;border-top:2px solid var(--line-firm);
+    padding:26px 0 40px;margin-top:8px;
+    max-height:none;overflow-y:visible;
+  }
+  /* below the split, each widget is MOVED (not cloned) into its own chapter.
+     one instance each — no duplicate ids, no hidden mounted copies. */
+  .work-bar{display:none}
+  .chapter:last-of-type{padding-bottom:clamp(56px,8vw,104px)}
+  .chapter .panel{
+    display:block;border-top:6px solid var(--hue);margin-top:30px;padding-top:18px;
+  }
+  .chapter .panel::before{
+    content:"Interactive workspace";display:block;margin-bottom:16px;
+    font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);
+  }
+  .work{border-top:4px solid var(--line-firm)}
+  .coda-grid{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .src-grid{grid-template-columns:1fr}
+  .src:nth-child(even){padding-left:0;border-left:0}
+  nav.ch-nav{width:100%;border-top:1px solid var(--line);padding-top:12px;gap:14px}
+  .checks,.node-list,.duty-check,.split2{grid-template-columns:1fr}
+  .split2 > div + div{border-left:0;border-top:1px solid var(--line)}
+}
+@media (max-width:560px){
+  .markband{grid-template-columns:repeat(2,1fr)}
+  .foot-grid{grid-template-columns:1fr}
+  table.era{font-size:11px}
+}
+
+/* ─── 10. Reduced motion — settle, don't move ─── */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .wipe,.panel.on,.cert{animation:none;clip-path:none}
+  .live-dot{animation:none}
+  *{transition-duration:1ms !important}
+}
+:focus-visible{outline:2px solid var(--c-blue);outline-offset:3px}
+</style>
+</head>
+<body>
+
+<!-- ═══ INLINED SYMBOLS — use-href across files dies over file:// ═══ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <g id="g-base" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter" stroke-linecap="butt"></g>
+
+  <symbol id="loop" viewBox="0 0 24 24" fill="none">
+    <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="3"/>
+    <circle cx="12" cy="4" r="2.6" fill="var(--signal,#0057B8)" stroke="none"/>
+  </symbol>
+
+  <!-- C · agreements: page atom = rectangle + dog-ear -->
+  <symbol id="c-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter" stroke-linecap="butt">
+    <path d="M5 2h9l5 5v15H5z"/><path d="M14 2v5h5"/>
+    <path d="M8 16h8" stroke="var(--signal,#0057B8)"/><path d="M8 19h5"/>
+  </symbol>
+
+  <!-- A · loop system: oversight = ring carrying a dot, watched -->
+  <symbol id="a-oversight" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="14" r="7"/>
+    <circle cx="12" cy="14" r="2.2" fill="currentColor" stroke="none"/>
+    <path d="M12 3v3" stroke="var(--signal,#0057B8)"/><path d="M6 4l2 2"/><path d="M18 4l-2 2"/>
+  </symbol>
+
+  <!-- B · record: stacked rules, the thing that was written down -->
+  <symbol id="b-record" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M3 5h18"/><path d="M3 10h18" stroke="var(--signal,#0057B8)"/><path d="M3 15h18"/><path d="M3 20h12"/>
+  </symbol>
+
+  <!-- B · attest: the seal. heavy 3px per the custody/seal rule -->
+  <symbol id="b-attest" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+    <circle cx="12" cy="10" r="6.5"/>
+    <path d="M9.5 10.2l1.8 1.8 3.4-3.6" stroke="var(--signal,#0057B8)" stroke-width="2.4"/>
+    <path d="M9 16.5V22l3-1.8 3 1.8v-5.5" stroke-width="2"/>
+  </symbol>
+
+  <!-- B · custody: sealed box, heavy edge -->
+  <symbol id="b-custody" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+    <rect x="3.5" y="8.5" width="17" height="12"/>
+    <path d="M8 8.5V6a4 4 0 0 1 8 0v2.5" stroke-width="2"/>
+    <path d="M12 13v4" stroke="var(--signal,#0057B8)" stroke-width="2"/>
+  </symbol>
+
+  <!-- E · signal & record: dot + rule, the two atoms -->
+  <symbol id="e-signal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M2 18h20"/>
+    <path d="M6 18v-4"/><path d="M11 18v-8"/><path d="M16 18v-6"/>
+    <circle cx="11" cy="6" r="2.6" fill="var(--signal,#0057B8)" stroke="none"/>
+  </symbol>
+</defs></svg>
+
+<!-- ═══ MASTHEAD ═══ -->
+<header class="mast">
+  <div class="container mast-in">
+    <div class="wm">
+      <svg viewBox="0 0 24 24" style="--signal:var(--c-blue)"><use href="#loop"/></svg>
+      <div>
+        <div class="wm-name">The Fiduciary-Native Product</div>
+        <div class="wm-sub">The proof lane · kenpriore.ai</div>
+      </div>
+    </div>
+    <nav class="ch-nav" id="chnav">
+      <a href="#ch1" data-hue="mustard" aria-current="true">Defensibility</a>
+      <a href="#ch2" data-hue="slate">Eras</a>
+      <a href="#ch3" data-hue="orange">Stack</a>
+      <a href="#ch4" data-hue="sage">Context</a>
+      <a href="#ch5" data-hue="rose">Duties</a>
+      <a href="#ch6" data-hue="mustard">Receipt</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ═══ POSTER HERO ═══ -->
+<section class="hero">
+  <div class="container">
+    <div class="kicker"><b>2026 Edition</b> · <span class="num">11</span> min read · Ken Priore</div>
+    <h1 class="poster wipe">Without defensibility,<br>the other three don't <em>matter</em></h1>
+    <div class="hero-rule"></div>
+    <p class="prose" style="margin-top:26px;font-size:18px">
+      Why defensibility is the fourth non-negotiable requirement for legal AI.
+    </p>
+  </div>
+
+  <div class="container">
+    <div class="markband">
+      <div data-hue="mustard"><svg viewBox="0 0 24 24"><use href="#b-attest"/></svg><span>Defensibility</span><span class="pt">01</span></div>
+      <div data-hue="slate"><svg viewBox="0 0 24 24"><use href="#c-sign"/></svg><span>Eras</span><span class="pt">02</span></div>
+      <div data-hue="orange"><svg viewBox="0 0 24 24"><use href="#e-signal"/></svg><span>Stack</span><span class="pt">03</span></div>
+      <div data-hue="sage"><svg viewBox="0 0 24 24"><use href="#b-record"/></svg><span>Context</span><span class="pt">04</span></div>
+      <div data-hue="rose"><svg viewBox="0 0 24 24"><use href="#a-oversight"/></svg><span>Duties</span><span class="pt">05</span></div>
+      <div data-hue="mustard"><svg viewBox="0 0 24 24"><use href="#b-custody"/></svg><span>Receipt</span><span class="pt">06</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ THE SPLIT ═══ -->
+<div class="container">
+<main class="split">
+
+  <!-- ── reading column ── -->
+  <div class="read">
+
+    <article class="chapter" id="ch1" data-panel="p1" data-hue="mustard">
+      <div class="chapter-head">
+        <div class="kicker"><b>Part <span class="num">01</span></b><span class="rule"></span><span class="reg">The claim</span></div>
+        <h2 class="ch-title">The Fourth Requirement</h2>
+      </div>
+      <div class="epigraph"><div class="tick"></div>
+        <p>Without defensibility, the other three don't matter.</p>
+      </div>
+      <p class="prose">Every product team balances three things: speed, accuracy, cost. Legal adds a fourth, and it is not a feature you bolt on at the end. A defensible product survives the question <strong>“Show me what actually happened and prove it.”</strong></p>
+      <p class="prose">Not survive a marketing presentation. Survive the moment a regulator, an opposing party, or a disciplinary board asks for the record.</p>
+      <div class="pullbox"><p>The customer is a fiduciary. A fiduciary-native product treats the evidentiary requirement as a core capability, not a compliance overlay.</p></div>
+      <p class="prose">Move the sliders. The three pillars are table stakes. Remove the fourth requirement and the product stops being adoptable.</p>
+    </article>
+
+    <article class="chapter" id="ch2" data-panel="p2" data-hue="slate">
+      <div class="chapter-head">
+        <div class="kicker"><b>Part <span class="num">02</span></b><span class="rule"></span><span class="reg">Analysis</span></div>
+        <h2 class="ch-title">The Four Eras of Legal Tech</h2>
+      </div>
+      <div class="epigraph"><div class="tick"></div>
+        <p>The duty does not move when the work does.</p>
+      </div>
+      <p class="prose">In the first era the lawyer was the integration layer. Everything lived in one person's head, and the record was whatever that person chose to write down. <strong>The system was the lawyer.</strong></p>
+      <p class="prose">Contract lifecycle management gave the work filing cabinets. Copilots automated stare-and-compare. Each era moved capability without moving the duty.</p>
+      <p class="prose">Agents pull their own context, make decisions nobody pre-authored, and trigger actions downstream. <strong>The lawyer becomes the author of the rules the agent operates inside.</strong></p>
+    </article>
+
+    <article class="chapter" id="ch3" data-panel="p3" data-hue="orange">
+      <div class="chapter-head">
+        <div class="kicker"><b>Part <span class="num">03</span></b><span class="rule"></span><span class="reg">Building</span></div>
+        <h2 class="ch-title">Four Stages, One Stack</h2>
+      </div>
+      <div class="epigraph"><div class="tick"></div>
+        <p>Each stage moves the work upstream.</p>
+      </div>
+      <p class="prose">Prompt engineering asks what to say. Context engineering asks what to know. Intent engineering asks what to want. Each is a step upstream from the last.</p>
+      <p class="prose">Intent alone is <strong>a promise without an enforceable contract</strong>. Spec engineering asks what the output must satisfy, and it is the only stage that produces something a third party can check.</p>
+      <div class="pullbox"><p>The work moves from instruction to authorship.</p></div>
+      <p class="prose">Legal is the leading edge here because the stakes are highest and the standards are the most formally defined. Finance, healthcare, and regulated product development follow the same path.</p>
+    </article>
+
+    <article class="chapter" id="ch4" data-panel="p4" data-hue="sage">
+      <div class="chapter-head">
+        <div class="kicker"><b>Part <span class="num">04</span></b><span class="rule"></span><span class="reg">Gathering</span></div>
+        <h2 class="ch-title">The Ring of Context</h2>
+      </div>
+      <div class="epigraph"><div class="tick"></div>
+        <p>Context without proof is just a story with no receipt.</p>
+      </div>
+      <p class="prose">The inner ring is agreement-adjacent and structured: master agreements, amendments, orders, playbooks, signing limits, indemnity ceilings. The outer ring is conversational and informal: Slack, procurement email, CRM notes, signing authority buried in an HRIS.</p>
+      <p class="prose">For thirty years <strong>the only system that could integrate the outer ring with the inner ring was the lawyer's brain.</strong> Aggregation finally does that job, and it makes the agent better informed.</p>
+      <div class="pullbox"><p>The lawyer with rich context can think better. The lawyer cannot yet prove what the system did on their behalf.</p></div>
+    </article>
+
+    <article class="chapter" id="ch5" data-panel="p5" data-hue="rose">
+      <div class="chapter-head">
+        <div class="kicker"><b>Part <span class="num">05</span></b><span class="rule"></span><span class="reg">Human stakes</span></div>
+        <h2 class="ch-title">The Fiduciary Rules</h2>
+      </div>
+      <div class="epigraph"><div class="tick"></div>
+        <p>Delegation does not transfer duty; automation does not suspend it.</p>
+      </div>
+      <p class="prose">ABA Formal Opinion 512 reads Model Rule 1.1 competence to cover the tools a lawyer uses, and Rules 5.1 and 5.3 to cover supervision of nonlawyer assistance. An agent is nonlawyer assistance that moves faster than the supervision designed for it.</p>
+      <p class="prose">Four duties map onto four specifications: loyalty to authority binding, care to consensus verification, disclosure to human review attribution, confidentiality to hash-only enrollment.</p>
+      <div class="pullbox"><p>The spec is the governance. Same activity, two vocabularies, one product capability.</p></div>
+    </article>
+
+    <article class="chapter" id="ch6" data-panel="p6" data-hue="mustard">
+      <div class="chapter-head">
+        <div class="kicker"><b>Part <span class="num">06</span></b><span class="rule"></span><span class="reg">Proof</span></div>
+        <h2 class="ch-title">The Defensibility Chain</h2>
+      </div>
+      <div class="epigraph"><div class="tick"></div>
+        <p>Logs are not receipts. A log tells you a story. A receipt is evidence.</p>
+      </div>
+      <p class="prose">A log is editable and engineering-oriented. It was built to help a developer debug a system, and it can be rotated, truncated, or rewritten without anyone noticing. A fiduciary receipt is signed and immutable, and it is addressed to someone outside the system that produced it.</p>
+      <p class="prose">Configure the mandate in the workspace and run it. The hash is computed in your browser over the payload you selected, exactly as it stands.</p>
+      <p class="prose"><a href="https://proof-of-execution.replit.app/" target="_blank" rel="noopener">Attest</a> is a working prototype of the agent action receipt.</p>
+    </article>
+
+  </div>
+
+  <!-- ── workspace column ── -->
+  <aside class="work" id="work" data-hue="mustard">
+    <div class="work-bar">
+      <div class="kicker"><b>Lab</b> · Interactive workspace</div>
+      <div class="kicker" id="workPart" style="color:var(--muted)">Part <span class="num">01</span></div>
+    </div>
+
+    <!-- P1 · BALANCE -->
+    <section class="panel on" id="p1" data-hue="mustard">
+      <div class="w-head"><h3>Four Capabilities, One Verdict</h3></div>
+      <p class="w-instr">Three pillars every product team already balances, and the fourth requirement as four separate capabilities. Set the profile, then check what the product can actually prove.</p>
+
+      <div class="ctl">
+        <div class="ctl-label"><span>Fast</span><span class="fig" id="vFast">85</span></div>
+        <input type="range" min="10" max="100" value="85" id="sFast">
+      </div>
+      <div class="ctl">
+        <div class="ctl-label"><span>Accurate</span><span class="fig" id="vAcc">90</span></div>
+        <input type="range" min="10" max="100" value="90" id="sAcc">
+      </div>
+      <div class="ctl">
+        <div class="ctl-label"><span>Cheap</span><span class="fig" id="vChp">80</span></div>
+        <input type="range" min="10" max="100" value="80" id="sChp">
+      </div>
+
+      <div class="checks" id="caps">
+        <label class="chk"><input type="checkbox" data-cap="Observability"><i></i>Observability</label>
+        <label class="chk"><input type="checkbox" data-cap="Traceability"><i></i>Traceability</label>
+        <label class="chk"><input type="checkbox" data-cap="Auditability"><i></i>Auditability</label>
+        <label class="chk"><input type="checkbox" data-cap="Attestation"><i></i>Attestation</label>
+      </div>
+
+      <div class="verdict" id="verdict" data-state="closed">
+        <div class="meter" id="meter" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
+        <!-- static fallback, mirrors GATES[0]. renderGate() overwrites it on load. -->
+        <div class="v-title" id="vTitle">Not adoptable</div>
+        <p class="v-body" id="vBody">Fast, accurate, cheap, and unable to show its work. In legal, the unprovable work is the one that hurts.</p>
+        <div class="v-meta" id="vMeta">Time to first audit failure: months, not years</div>
+      </div>
+    </section>
+
+    <!-- P2 · TIMELINE -->
+    <section class="panel" id="p2" data-hue="slate">
+      <div class="w-head"><h3>Four Eras</h3></div>
+      <p class="w-instr">Select an era to read its posture. The comparison holds all four in view, including the risk each one carried.</p>
+
+      <div class="tabs" role="tablist" id="eraTabs">
+        <button class="tab" role="tab" aria-selected="true" data-era="0">Human<span class="yr">Pre-2010s</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-era="1">CLM<span class="yr">2010–2022</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-era="2">Copilot<span class="yr">2023–2025</span></button>
+        <button class="tab" role="tab" aria-selected="false" data-era="3">Fiduciary<span class="yr">2026+</span></button>
+      </div>
+
+      <div class="w-block" id="eraDetail"></div>
+
+      <table class="era" id="eraTable">
+        <thead><tr><th>Era</th><th>Role of lawyer</th><th>Primary risk</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <!-- P3 · STACK -->
+    <section class="panel" id="p3" data-hue="orange">
+      <div class="w-head"><h3>Prompt to Spec</h3></div>
+      <p class="w-instr">Depth reads from rule weight. The heavier the left edge, the further upstream the work sits.</p>
+      <div id="stackList"></div>
+      <div class="w-block" id="stackDetail"></div>
+    </section>
+
+    <!-- P4 · RINGS -->
+    <section class="panel" id="p4" data-hue="sage">
+      <div class="w-head"><h3>The Ring of Context</h3></div>
+      <p class="w-instr">Toggle a channel to bring it into the agent's context. Inner-ring sources weigh half again as much as outer-ring ones.</p>
+
+      <div class="rings">
+        <svg viewBox="20 20 260 260" id="ringSvg" role="img" aria-label="Inner and outer rings of context">
+          <circle cx="150" cy="150" r="120" fill="none" stroke="var(--line)" stroke-width="1"/>
+          <circle cx="150" cy="150" r="75" fill="none" stroke="var(--ink)" stroke-width="2"/>
+          <circle cx="150" cy="150" r="26" fill="var(--ink)"/>
+          <text x="150" y="154" text-anchor="middle" fill="#fff" font-family="Archivo" font-size="9" font-weight="700" letter-spacing="1.6">CORE</text>
+          <g id="ringNodes"></g>
+        </svg>
+      </div>
+
+      <div class="cov-bar"><span id="covBar" style="width:62%"></span></div>
+      <div class="cov-note"><span>Context coverage</span><span class="fig" id="covPct">62%</span></div>
+      <div class="node-list" id="nodeList"></div>
+      <div class="w-block w-block--soft">
+        <div class="kicker" style="margin-bottom:8px">The fiduciary caveat</div>
+        <p class="small" style="color:var(--ink-soft)">Coverage tells you how well the agent can think. It tells you nothing about what you can show afterwards.</p>
+      </div>
+    </section>
+
+    <!-- P5 · DUTIES -->
+    <section class="panel" id="p5" data-hue="rose">
+      <div class="w-head"><h3>Four Duties, Four Specs</h3></div>
+      <p class="w-instr">Each duty is a legal standard on the left and an engineering requirement on the right. Same obligation, two vocabularies.</p>
+      <div id="dutyList"></div>
+      <div class="split2" id="dutyDetail"></div>
+    </section>
+
+    <!-- P6 · SANDBOX -->
+    <section class="panel" id="p6" data-hue="mustard">
+      <div class="w-head"><h3>Fiduciary Sandbox</h3></div>
+      <p class="w-instr">Configure the mandate, then execute. The digest is computed with SubtleCrypto over the payload below.</p>
+
+      <div id="configBlock">
+      <div class="selects">
+        <div class="sel"><label for="q1">Agent mandate</label><select id="q1">
+          <option>Approve Vendor Service Agreements</option>
+          <option>Evaluate SaaS License Adjustments</option>
+          <option>Audit Liability Carve-outs in NDAs</option>
+        </select></div>
+        <div class="sel"><label for="q2">Hard liability ceiling</label><select id="q2">
+          <option>USD 10,000</option><option>USD 50,000</option><option>Unlimited</option>
+        </select></div>
+        <div class="sel"><label for="q3">Consensus check level</label><select id="q3">
+          <option>Double-pass independent check</option><option>Single-pass run</option>
+        </select></div>
+        <div class="sel"><label for="q4">Confidentiality protection</label><select id="q4">
+          <option>Cryptographic hash-only</option><option>Verbose standard dev logs</option>
+        </select></div>
+        <div class="sel"><label for="q5">Human reviewer in loop</label><select id="q5">
+          <option>Supervising counsel</option><option>Lead deal desk manager</option><option>None</option>
+        </select></div>
+      </div>
+
+      <div style="margin-top:18px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn" id="runBtn">Execute agent pipeline</button>
+      </div>
+      </div><!-- /#configBlock -->
+
+      <div class="term" id="term" hidden>
+        <div class="term-bar"><span class="live-dot"></span> Live oversight audit terminal</div>
+        <ol id="termLog"></ol>
+      </div>
+
+      <div id="certSlot"></div>
+    </section>
+
+    <!-- the alert state is deliberately absent: a permanent red swatch here
+         would spend the page's red budget on decoration, which is the exact
+         thing the budget exists to prevent. red teaches itself. -->
+    <div class="legend">
+      <div class="l-human"><i></i>Held by a human · provable</div>
+      <div class="l-caution"><i></i>Caution · unverified</div>
+      <div class="l-off"><i></i>Not in play</div>
+    </div>
+
+    <nav class="ledger" id="ledger" aria-label="Chapters">
+      <a href="#ch1" data-hue="mustard" aria-current="true">01</a>
+      <a href="#ch2" data-hue="slate">02</a>
+      <a href="#ch3" data-hue="orange">03</a>
+      <a href="#ch4" data-hue="sage">04</a>
+      <a href="#ch5" data-hue="rose">05</a>
+      <a href="#ch6" data-hue="mustard">06</a>
+    </nav>
+  </aside>
+
+</main>
+</div>
+
+<!-- ═══ CODA ═══ -->
+<section class="coda">
+  <div class="container">
+    <div class="kicker" style="margin-bottom:18px">Coda</div>
+    <div class="coda-grid">
+      <div>
+        <h2 class="ch-title" style="margin-bottom:22px">The Defensibility Imperative</h2>
+        <p class="prose">Fast, accurate, and cheap are table stakes. Defensible determines category membership.</p>
+        <p class="prose"><strong>A non-defensible AI product in any regulated profession is not a worse product. It is a product in a different category</strong>, the category practitioners pilot enthusiastically and quietly abandon once the liability questions get serious.</p>
+      </div>
+      <div>
+        <div class="w-block" style="margin-top:0">
+          <div class="kicker" style="margin-bottom:12px">The claim</div>
+          <p style="font-size:22px;font-weight:800;letter-spacing:-.02em;line-height:1.16">The moat is the discipline. The discipline is the product.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sources">
+      <div class="kicker">Sources</div>
+      <div class="src-grid">
+        <div class="src">
+          <div class="cite">ABA Formal Opinion <span class="num">512</span> (<span class="num">2024</span>)</div>
+          <a href="https://www.americanbar.org/content/dam/aba/administrative/professional_responsibility/ethics-opinions/aba-formal-opinion-512.pdf" target="_blank" rel="noopener">Generative AI in Legal Practice</a>
+          <p>Guidance on generative AI risk, outlining attorney duties on competence, supervision, confidentiality, and verification.</p>
+        </div>
+        <div class="src">
+          <div class="cite">Model Rule <span class="num">1.1</span></div>
+          <a href="https://www.americanbar.org/groups/professional_responsibility/publications/model_rules_of_professional_conduct/rule_1_1_competence/" target="_blank" rel="noopener">Competence</a>
+          <p>Competent representation requires the legal knowledge, skill, thoroughness and preparation reasonably necessary.</p>
+        </div>
+        <div class="src">
+          <div class="cite">Model Rule <span class="num">5.1</span></div>
+          <a href="https://www.americanbar.org/groups/professional_responsibility/publications/model_rules_of_professional_conduct/rule_5_1_responsibilities_of_a_partner_or_supervisory_lawyer/" target="_blank" rel="noopener">Responsibilities of a Supervisory Lawyer</a>
+          <p>Partners must make reasonable efforts to ensure the firm has measures giving reasonable assurance of conformity.</p>
+        </div>
+        <div class="src">
+          <div class="cite">Model Rule <span class="num">5.3</span></div>
+          <a href="https://www.americanbar.org/groups/professional_responsibility/publications/model_rules_of_professional_conduct/rule_5_3_responsibilities_regarding_nonlawyer_assistant/" target="_blank" rel="noopener">Responsibilities Regarding Nonlawyer Assistance</a>
+          <p>The rule read to cover AI systems acting as nonlawyer assistance under a lawyer's supervision.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-col foot-col--read">
+        <div class="kicker">Read</div>
+        <ul>
+          <li><a href="https://kenpriore.com/tag/signals/">Signals</a></li>
+          <li><a href="https://kenpriore.com/tag/reflections/">Reflections</a></li>
+          <li><a href="https://kenpriore.com/tag/foundations/">Foundations</a></li>
+        </ul>
+      </div>
+      <div class="foot-col foot-col--interactive">
+        <div class="kicker">Interactive</div>
+        <ul>
+          <li><a href="https://kenpriore.ai/#maps">The maps</a></li>
+          <li><a href="https://kenpriore.ai/#model">The operating model</a></li>
+          <li><a href="https://kenpriore.ai/#proof">The proof lane</a></li>
+          <li><a href="https://lab.kenpriore.ai">Lab log in</a></li>
+        </ul>
+      </div>
+      <div class="foot-col foot-col--record">
+        <div class="kicker">On the record</div>
+        <ul>
+          <li><a href="https://kenpriore.com/about/">About Ken</a></li>
+          <li><a href="https://resume.kenpriore.ai">Resume</a></li>
+        </ul>
+      </div>
+      <div class="foot-col foot-col--follow">
+        <div class="kicker">Follow</div>
+        <ul>
+          <li><a href="https://kenpriore.com">Subscribe</a></li>
+          <li><a href="https://kenpriore.com/rss/">RSS</a></li>
+          <li><a href="https://linkedin.com/in/kennethpriore">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="colophon num">
+      <span>© 2026 Ken Priore · Personal views · Not legal advice</span>
+      <span><a href="https://kenpriore.ai">kenpriore.ai</a> · <a href="https://kenpriore.com">kenpriore.com</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+/* ── 1. Scroll spy — IntersectionObserver, hard cut + wipe on swap ── */
+const chapters = $$('.chapter');
+const ledger = $$('#ledger a');
+const nav = $$('#chnav a');
+let active = 'p1';
+
+const HUES = ['mustard','slate','orange','sage','rose','mustard'];
+
+function activate(pid, idx){
+  if(pid === active) return;
+  active = pid;
+  // when stacked, every panel stays visible in its own chapter
+  if(!mqStack.matches) $$('.panel').forEach(p => p.classList.toggle('on', p.id === pid));
+  // the workspace adopts the active chapter's hue
+  $('#work').setAttribute('data-hue', HUES[idx]);
+  ledger.forEach((a,i) => a.setAttribute('aria-current', i === idx ? 'true' : 'false'));
+  nav.forEach((a,i) => a.setAttribute('aria-current', i === idx ? 'true' : 'false'));
+  $('#workPart').innerHTML = 'Part <span class="num">0' + (idx+1) + '</span>';
+}
+
+// the band the reading position is measured against
+function resolveActive(){
+  const top = window.innerHeight * 0.15, bottom = window.innerHeight * 0.45;
+  let idx = 0;
+  for(let i = 0; i < chapters.length; i++){
+    const r = chapters[i].getBoundingClientRect();
+    if(r.top < bottom && r.bottom > top){ idx = i; break; }
+    if(r.top <= top) idx = i;
+  }
+  activate(chapters[idx].dataset.panel, idx);
+}
+
+let ticking = false;
+window.addEventListener('scroll', () => {
+  if(ticking) return;
+  ticking = true;
+  requestAnimationFrame(() => { resolveActive(); ticking = false; });
+}, { passive:true });
+
+const io = new IntersectionObserver(entries => {
+  // recompute from ALL chapters, not just the delivered entries. an instant
+  // jump can skip the band entirely at both ends, in which case the callback
+  // either never fires or fires with nothing intersecting — and the spy sticks.
+  resolveActive();
+}, { rootMargin:'-15% 0px -55% 0px', threshold:0 });
+chapters.forEach(c => io.observe(c));
+
+/* ── 1b. Below 880 the workspace can't be sticky, so each panel MOVES into
+   its own chapter. moved, never cloned — one instance, no duplicate ids. ── */
+const mqStack = window.matchMedia('(max-width:880px)');
+const work = $('#work');
+const legendEl = work.querySelector('.legend');
+
+function placePanels(){
+  if(mqStack.matches){
+    chapters.forEach(ch => {
+      const p = document.getElementById(ch.dataset.panel);
+      if(p.parentElement !== ch){ ch.appendChild(p); }
+      p.classList.add('on');
+    });
+  } else {
+    chapters.forEach(ch => {
+      const p = document.getElementById(ch.dataset.panel);
+      if(p.parentElement !== work){ work.insertBefore(p, legendEl); }
+      p.classList.toggle('on', p.id === active);
+    });
+  }
+}
+placePanels();
+mqStack.addEventListener('change', placePanels);
+
+/* ── 2. Balance ── */
+const caps = $$('#caps input');
+const sliders = { fast:$('#sFast'), acc:$('#sAcc'), chp:$('#sChp') };
+const outs = { fast:$('#vFast'), acc:$('#vAcc'), chp:$('#vChp') };
+
+const GATES = [
+  { state:'closed', title:'Not adoptable',
+    body:'Fast, accurate, cheap, and unable to show its work. In legal, the unprovable work is the one that hurts.',
+    meta:'Time to first audit failure: months, not years' },
+  { state:'pilot', title:'Pilot only',
+    body:'Instrumentation an engineer would accept. A regulator would not. It clears procurement and stalls at deployment.',
+    meta:'Cleared for evaluation, not for reliance' },
+  { state:'pilot', title:'Pilot only',
+    body:'Two capabilities gets you monitoring, which reports inward, to people who already trust the system.',
+    meta:'Cleared for evaluation, not for reliance' },
+  { state:'most', title:'Most workflows',
+    body:'Auditable work covers the ordinary case. Nothing leaves the building that an outsider could check.',
+    meta:'Holds until the first contested decision' },
+  { state:'open', title:'Fiduciary native',
+    body:'Observable, traceable, auditable, and attested. The fourth capability is the one an outside reader can verify.',
+    meta:'Time to first audit failure: not expected' }
+];
+
+function renderGate(){
+  const n = caps.filter(c => c.checked).length;
+  const g = GATES[n];
+  const v = $('#verdict');
+  v.dataset.state = g.state;
+  $('#vTitle').textContent = g.title;
+  $('#vBody').textContent = g.body;
+  $('#vMeta').textContent = g.meta;
+  $$('#caps .chk').forEach(l => l.classList.toggle('on', l.querySelector('input').checked));
+  $$('#meter span').forEach((s,i) => s.dataset.on = i < n ? '1' : '0');
+}
+caps.forEach(c => c.addEventListener('change', renderGate));
+Object.keys(sliders).forEach(k => {
+  sliders[k].addEventListener('input', () => { outs[k].textContent = sliders[k].value; });
+});
+renderGate();
+
+/* ── 3. Timeline ── */
+const ERAS = [
+  { t:'Human Integration', p:'Pre-2010s', role:'Integration layer',
+    cog:'None. The system was the lawyer',
+    d:'Context and judgment sat with one lawyer. What got written down was up to them.',
+    risk:'Knowledge leaves when the person does' },
+  { t:'Contract Lifecycle Management', p:'2010–2022', role:'Process owner',
+    cog:'Storage and retrieval',
+    d:'The work got filing cabinets. Repositories, templates, approval routing. Documents got easier to locate. Trusting them was still a person’s job.',
+    risk:'Filing is mistaken for governing' },
+  { t:'LLM Augmentation', p:'2023–2025', role:'Reviewer',
+    cog:'Drafting and comparison',
+    d:'Copilots automated stare-and-compare. Output volume rose sharply and the review burden grew with it.',
+    risk:'Confident output with no chain back to a source' },
+  { t:'The Fiduciary-Native Era', p:'2026+', role:'Rule-spec author and supervisor',
+    cog:'Verifiable agentic action',
+    d:'Agents execute across systems, pull their own context, and make decisions nobody pre-authored. The lawyer authors the rules the agent runs inside.',
+    risk:'Action taken under an authority nobody can reconstruct' }
+];
+
+function renderEra(i){
+  const e = ERAS[i];
+  $('#eraDetail').innerHTML =
+    '<h4>' + e.t + '</h4>' +
+    '<div class="kicker" style="margin:6px 0 12px"><span class="num">' + e.p + '</span></div>' +
+    '<p class="small" style="color:var(--ink-soft);margin-bottom:14px">' + e.d + '</p>' +
+    '<div class="kicker" style="margin-bottom:5px">Role of lawyer</div><p class="small" style="color:var(--ink);margin-bottom:11px">' + e.role + '</p>' +
+    '<div class="kicker" style="margin-bottom:5px">System cognition</div><p class="small" style="color:var(--ink)">' + e.cog + '</p>';
+  $$('#eraTabs .tab').forEach((t,j) => t.setAttribute('aria-selected', j===i ? 'true':'false'));
+  $$('#eraTable tbody tr').forEach((r,j) => r.dataset.on = j===i ? '1':'0');
+}
+$('#eraTable').querySelector('tbody').innerHTML = ERAS.map((e,i) =>
+  '<tr data-on="0"><td>' + (i===3 ? '<span class="live"></span>' : '') + e.t + '</td>' +
+  '<td>' + e.role + '</td><td>' + e.risk + '</td></tr>').join('');
+$$('#eraTabs .tab').forEach(t => t.addEventListener('click', () => renderEra(+t.dataset.era)));
+renderEra(0);
+
+/* ── 4. Stack ── */
+const LAYERS = [
+  { n:'Prompt engineering', pos:'Downstream', w:1,
+    tag:'Tell the system what to say.',
+    op:'Writes an instruction and inspects the answer.',
+    fail:'The instruction is not the standard. Nothing carries between runs.',
+    ex:'Review this NDA. Identify any unusual indemnity language. Suggest a redline.' },
+  { n:'Context engineering', pos:'Middle', w:2,
+    tag:'Tell the system what to know.',
+    op:'Assembles the record the model reasons over.',
+    fail:'Richer inputs produce better answers, and nothing you can hand an auditor.',
+    ex:'Retrieve: master agreement, amendments 1–3, playbook §4, signing limits for the requesting business unit.' },
+  { n:'Intent engineering', pos:'Upstream', w:3,
+    tag:'Tell the system what to want.',
+    op:'States the objective and the tolerances around it.',
+    fail:'A promise without an enforceable contract.',
+    ex:'Optimize for closing speed without accepting uncapped indemnity.' },
+  { n:'Spec engineering', pos:'Upstream', w:4,
+    tag:'Tell the system what it must satisfy.',
+    op:'Writes an executable contract defining authorization, evidence requirements, and conditions for action.',
+    fail:'None. The output is written to be verified.',
+    ex:'If indemnity_cap > $250K AND counterparty_risk_tier >= 2, escalate to senior counsel.' }
+];
+
+$('#stackList').innerHTML = LAYERS.map((l,i) =>
+  '<button class="stack-row" data-w="' + l.w + '" data-i="' + i + '" aria-selected="' + (i===3) + '">' +
+  '<span class="sn">0' + (i+1) + '</span><span class="st">' + l.n + '</span><span class="sp">' + l.pos + '</span></button>').join('');
+
+function renderStack(i){
+  const l = LAYERS[i];
+  $('#stackDetail').innerHTML =
+    '<h4>' + l.n + '</h4>' +
+    '<p class="small" style="color:var(--ink);margin:6px 0 14px;font-size:14px">' + l.tag + '</p>' +
+    '<div class="kicker" style="margin-bottom:5px">Operator role</div>' +
+    '<p class="small" style="color:var(--ink-soft);margin-bottom:12px">' + l.op + '</p>' +
+    '<div class="kicker" style="margin-bottom:5px">Failure mode</div>' +
+    '<p class="small" style="color:var(--ink-soft)">' + l.fail + '</p>' +
+    '<pre class="code">' + l.ex.replace(/>/g,'&gt;') + '</pre>';
+  $$('.stack-row').forEach((r,j) => r.setAttribute('aria-selected', j===i ? 'true':'false'));
+}
+$$('.stack-row').forEach(r => r.addEventListener('click', () => renderStack(+r.dataset.i)));
+renderStack(3);
+
+/* ── 5. Rings ── */
+const NODES = [
+  { l:'Agreements & Amendments', ring:'inner', on:true,  d:'Executed instruments and every amendment that modified them.' },
+  { l:'Playbook Limits',         ring:'inner', on:true,  d:'The positions counsel pre-approved, and the ones requiring escalation.' },
+  { l:'Pricing Ceilings',        ring:'inner', on:false, d:'Indemnity caps and liability ceilings the business may not cross.' },
+  { l:'Slack Threads',           ring:'outer', on:true,  d:'Conversational records showing why a carve-out was agreed.' },
+  { l:'Counterparty Emails',     ring:'outer', on:true,  d:'Negotiation history outside the four corners of the document.' },
+  { l:'CRM Records',             ring:'outer', on:false, d:'Account posture, renewal risk, and commercial context.' },
+  { l:'HRIS Roles',              ring:'outer', on:false, d:'Who actually holds signing authority today, not last quarter.' }
+];
+
+function ringPos(i){
+  const inner = NODES.filter(n => n.ring==='inner');
+  if(NODES[i].ring === 'inner'){
+    const k = inner.indexOf(NODES[i]);
+    const a = (-90 + 120*k) * Math.PI/180;
+    return [150 + 75*Math.cos(a), 150 + 75*Math.sin(a)];
+  }
+  const k = i - inner.length;
+  const a = (45 + 90*k) * Math.PI/180;
+  return [150 + 120*Math.cos(a), 150 + 120*Math.sin(a)];
+}
+
+function renderRings(){
+  const g = $('#ringNodes');
+  g.innerHTML = NODES.map((n,i) => {
+    const [x,y] = ringPos(i);
+    const r = n.ring==='inner' ? 9 : 7;
+    return '<g class="node" data-i="' + i + '" tabindex="0" role="button" aria-pressed="' + n.on + '">' +
+      '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="' + r + '" ' +
+      'fill="' + (n.on ? 'var(--hue)' : 'var(--paper)') + '" ' +
+      'stroke="' + (n.on ? 'var(--hue)' : 'var(--muted)') + '" stroke-width="2"/></g>';
+  }).join('');
+  g.querySelectorAll('.node').forEach(el => {
+    el.addEventListener('click', () => { NODES[+el.dataset.i].on = !NODES[+el.dataset.i].on; renderRings(); });
+    el.addEventListener('keydown', e => { if(e.key==='Enter'||e.key===' '){ e.preventDefault(); el.click(); } });
+  });
+
+  $('#nodeList').innerHTML = NODES.map((n,i) =>
+    '<button data-i="' + i + '" data-ring="' + n.ring + '" aria-pressed="' + n.on + '"><i></i>' + n.l +
+    '<span class="rr">' + (n.ring==='inner'?'IN':'OUT') + '</span></button>').join('');
+  $$('#nodeList button').forEach(b => b.addEventListener('click', () => {
+    NODES[+b.dataset.i].on = !NODES[+b.dataset.i].on; renderRings();
+  }));
+
+  let got=0, tot=0;
+  NODES.forEach(n => { const w = n.ring==='inner' ? 1.5 : 1; tot += w; if(n.on) got += w; });
+  const pct = Math.round(got/tot*100) + '%';
+  $('#covPct').textContent = pct;
+  $('#covBar').style.width = pct;
+}
+renderRings();
+
+/* ── 6. Duties ── */
+const DUTIES = [
+  { d:'Loyalty', s:'Authority binding',
+    legal:'The fiduciary must act for the beneficiary’s benefit, not their own or a third party’s. Conflicts must be avoided or disclosed and waived.',
+    eng:'Every action carries a signed reference to the authority that permitted it. An action without a binding is refused, not logged.' },
+  { d:'Care', s:'Consensus verification',
+    legal:'Competent representation requires the thoroughness and preparation reasonably necessary. Rule 1.1, extended to the tools in use.',
+    eng:'Independent double-pass evaluation with divergence recorded. A single unverified pass is marked as such on the receipt.' },
+  { d:'Disclosure', s:'Human review attribution',
+    legal:'Material facts about how the work was performed belong to the person relying on it, including the role automation played.',
+    eng:'The receipt names the human who reviewed it and what was in front of them at the time.' },
+  { d:'Confidentiality', s:'Hash-only enrollment',
+    legal:'Rule 1.6 protects information relating to the representation, including from the infrastructure processing it.',
+    eng:'Only digests leave the boundary. The record proves the content existed without carrying the content.' }
+];
+
+$('#dutyList').innerHTML = DUTIES.map((x,i) =>
+  '<button class="duty" data-i="' + i + '" aria-selected="' + (i===0) + '">' +
+  '<span class="dn">' + x.d + '</span><span class="ds">' + x.s + '</span></button>').join('');
+
+function renderDuty(i){
+  const x = DUTIES[i];
+  $('#dutyDetail').innerHTML =
+    '<div><div class="kicker">The duty</div><p class="small" style="color:var(--ink-soft)">' + x.legal + '</p></div>' +
+    '<div><div class="kicker">The spec</div><p class="small" style="color:var(--ink-soft)">' + x.eng + '</p></div>';
+  $$('.duty').forEach((b,j) => b.setAttribute('aria-selected', j===i ? 'true':'false'));
+}
+$$('.duty').forEach(b => b.addEventListener('click', () => renderDuty(+b.dataset.i)));
+renderDuty(0);
+
+/* ── 7. Sandbox — real SHA-256 over the real payload ── */
+const runBtn = $('#runBtn'), configBlock = $('#configBlock');
+let running = false;
+
+function cfg(){
+  return {
+    mandate: $('#q1').value,
+    liability_ceiling: $('#q2').value,
+    consensus: $('#q3').value,
+    confidentiality: $('#q4').value,
+    supervisor: $('#q5').value
+  };
+}
+function duties(c){
+  return {
+    loyalty: c.liability_ceiling !== 'Unlimited',
+    care: c.consensus.startsWith('Double'),
+    disclosure: c.supervisor !== 'None',
+    confidentiality: c.confidentiality.startsWith('Cryptographic')
+  };
+}
+async function sha256(str){
+  if(window.crypto && window.crypto.subtle){
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+  return null; // never fabricate — the UI says so instead
+}
+
+function logLines(c, d){
+  const t0 = Date.now();
+  const stamp = n => new Date(t0 + n*1400).toISOString().substr(11,8);
+  const L = [];
+  let i = 0;
+  const push = (k, s) => L.push({ k, t: stamp(i++), s });
+  push('', 'Initializing agent pipeline: ' + c.mandate);
+  push('', 'Binding authority: ceiling ' + c.liability_ceiling);
+  d.loyalty ? push('ok', 'Authority bound. Ceiling enforceable.')
+            : push('warn', 'Unlimited ceiling. No enforceable authority boundary.');
+  push('', 'Evaluating counterparty terms against playbook.');
+  d.care ? push('ok', 'Double-pass complete. Divergence recorded.')
+         : push('warn', 'Single pass only. No independent check to compare against.');
+  push('', 'Confidentiality mode: ' + c.confidentiality);
+  d.confidentiality ? push('ok', 'Hash-only enrollment. No raw content crossed the boundary.')
+                    : push('warn', 'Verbose telemetry is writing raw client discussion to standard logs.');
+  push('', 'Routing for human review.');
+  d.disclosure ? push('ok', 'Reviewed and attributed: ' + c.supervisor + '.')
+               : push('warn', 'No human reviewer. Nothing to attribute the decision to.');
+  push('', 'Computing digest over canonical payload.');
+  push('ok', 'Receipt sealed.');
+  return L;
+}
+
+async function run(){
+  if(running) return;
+  running = true;
+  runBtn.disabled = true;
+  $('#certSlot').innerHTML = '';
+  const term = $('#term'), log = $('#termLog');
+  term.hidden = false; log.innerHTML = '';
+
+  const c = cfg(), d = duties(c);
+  const lines = logLines(c, d);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  for(let i=0;i<lines.length;i++){
+    await new Promise(r => setTimeout(r, reduce ? 0 : 240));
+    const li = document.createElement('li');
+    if(lines[i].k) li.dataset.k = lines[i].k;
+    li.innerHTML = '<span class="t">' + lines[i].t + '</span>' + lines[i].s;
+    log.appendChild(li);
+    term.scrollTop = term.scrollHeight;   // tail the log
+  }
+
+  const payload = {
+    specification_version: 'CERT_F_v2.0.0',
+    mandate: c.mandate,
+    liability_ceiling: c.liability_ceiling,
+    consensus_check: c.consensus,
+    confidentiality_mode: c.confidentiality,
+    supervisor_approval: c.supervisor,
+    duties_met: d
+  };
+  // deep key sort. an ARRAY second arg to JSON.stringify is an allowlist,
+  // not a sort order, and it strips nested keys — which silently left
+  // duties_met out of the digest. the seal must cover the duty evaluation.
+  const sortDeep = v => Array.isArray(v) ? v.map(sortDeep)
+    : (v && typeof v === 'object')
+      ? Object.fromEntries(Object.keys(v).sort().map(k => [k, sortDeep(v[k])]))
+      : v;
+  const canonical = JSON.stringify(sortDeep(payload), null, 2);
+  const digest = await sha256(canonical);
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const met = Object.values(d).filter(Boolean).length;
+
+  $('#certSlot').innerHTML =
+   '<div class="cert">' +
+    '<div class="cert-top">' +
+      '<div><h4>Agent Action Receipt</h4>' +
+      '<div class="kicker" style="margin-top:4px">Duties satisfied <b class="fig">' + met + '/4</b> · ' +
+      '<span class="num" style="color:var(--muted)">CERT_F_v2.0.0</span></div></div>' +
+      '<div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">' +
+        '<span class="cert-flag" data-ok="' + (met===4?1:0) + '">' + (met===4 ? 'Sealed' : 'Incomplete') + '</span>' +
+        '<button class="btn btn--sm" id="logToggle" type="button">Show log</button>' +
+        '<button class="btn btn--sm" id="newRun" type="button">New run</button>' +
+      '</div>' +
+    '</div>' +
+    '<div class="cert-body">' +
+      '<p class="small" style="color:var(--ink-soft)">Agent acting under the mandate <strong style="color:var(--ink)">' + c.mandate + '</strong>, ' +
+      'bound to a ceiling of <strong style="color:var(--ink)">' + c.liability_ceiling + '</strong>, ' +
+      (c.supervisor==='None' ? 'with no human reviewer attached.' : 'reviewed by <strong style="color:var(--ink)">' + c.supervisor + '</strong>.') + '</p>' +
+      '<dl class="kv">' +
+        '<dt>SHA-256</dt><dd class="hash">' + (digest || 'Unavailable. SubtleCrypto needs a secure context. Nothing is shown.') + '</dd>' +
+        '<dt>Payload</dt><dd><details><summary>Show the bytes that were hashed</summary>' +
+          '<div style="white-space:pre-wrap">' + esc(canonical) + '</div></details></dd>' +
+      '</dl>' +
+      '<div class="duty-check">' +
+        '<div data-met="' + (d.loyalty?1:0) + '"><i></i>Loyalty</div>' +
+        '<div data-met="' + (d.care?1:0) + '"><i></i>Care</div>' +
+        '<div data-met="' + (d.disclosure?1:0) + '"><i></i>Disclosure</div>' +
+        '<div data-met="' + (d.confidentiality?1:0) + '"><i></i>Confidentiality</div>' +
+      '</div>' +
+      '<p class="small" style="margin-top:14px">The digest above is computed in your browser over the payload shown. Recompute it yourself and it will match.</p>' +
+    '</div>' +
+   '</div>';
+
+  // hard cut. configure → run → receipt are three states of one surface, not
+  // three stacked surfaces. the form and the log both yield to the receipt,
+  // so the receipt lands at the top of the panel instead of below the fold.
+  term.hidden = true;
+  configBlock.hidden = true;
+
+  $('#logToggle').addEventListener('click', () => {
+    const t = $('#term'), b = $('#logToggle');
+    t.hidden = !t.hidden;
+    b.textContent = t.hidden ? 'Show log' : 'Hide log';
+    if(!t.hidden) t.scrollTop = t.scrollHeight;
+  });
+  $('#newRun').addEventListener('click', () => {
+    $('#term').hidden = true; $('#termLog').innerHTML = ''; $('#certSlot').innerHTML = '';
+    configBlock.hidden = false; runBtn.disabled = false;
+  });
+  running = false;
+}
+
+runBtn.addEventListener('click', run);
+
+})();
+</script>
+</body>
+</html>
