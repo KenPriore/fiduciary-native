@@ -66,15 +66,13 @@
 /* The masthead is sticky, so an anchor jump would land the chapter heading UNDER
    it. scroll-padding-top reserves the header height plus a little air. */
 html{scroll-behavior:smooth;scroll-padding-top:112px}
-/* Measured header steps are at 1074, 542, 433 and 345 — heights 88.5 / 146 /
-   184.5 / 214.5 / 231. Each step needs its own reservation or chapter headings
-   land under the sticky bar. Values are the height plus ~25px of air.
-   The 880 block is not a header step; it is harmless and kept only because the
-   wrapped-nav rules already gate there. */
-@media (max-width:1073px){html{scroll-padding-top:172px}}
+/* Retuned after the wordmark shortened to "Ken Priore". Header steps are now
+   981, 542 and 345 — heights 88.5 / 146 / 184.5 / 201. Each value is the height
+   plus ~25px of air. The old 433 step no longer exists, and 214.5/231 no longer
+   occur, so those two rules were over-reserving by 30px. */
+@media (max-width:980px){html{scroll-padding-top:172px}}
 @media (max-width:541px){html{scroll-padding-top:210px}}
-@media (max-width:432px){html{scroll-padding-top:240px}}
-@media (max-width:344px){html{scroll-padding-top:256px}}
+@media (max-width:344px){html{scroll-padding-top:226px}}
 body{
   font-family:var(--sans); background:var(--paper); color:var(--ink);
   font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
@@ -126,9 +124,10 @@ header.mast{
 nav.ch-nav{display:flex;gap:28px;flex-wrap:wrap}
 /* The nav drops to its own row at 1073px, but the rule that gives that row its
    hairline and padding lives in the 880px block — leaving a band where it floated
-   bare. Restated here at the real wrap point; the copy inside @880 is now
-   redundant and can be deleted on the next pass through that block. */
-@media (max-width:1073px){
+   bare. 980 is the natural wrap point now that the wordmark reads "Ken Priore"
+   rather than the product name — it was 1073 when the lockup was 84px wider,
+   and holding the old value threw away 93px of usable width. */
+@media (max-width:980px){
   nav.ch-nav{width:100%;border-top:1px solid var(--line);padding-top:12px;gap:14px}
 }
 nav.ch-nav a{
@@ -519,7 +518,6 @@ footer li a:hover{color:var(--hue);text-decoration:none}
   .foot-grid{grid-template-columns:1fr 1fr}
   .src-grid{grid-template-columns:1fr}
   .src:nth-child(even){padding-left:0;border-left:0}
-  nav.ch-nav{width:100%;border-top:1px solid var(--line);padding-top:12px;gap:14px}
   .checks,.node-list,.duty-check,.split2{grid-template-columns:1fr}
   .split2 > div + div{border-left:0;border-top:1px solid var(--line)}
 }
