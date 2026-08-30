@@ -66,13 +66,15 @@
 /* The masthead is sticky, so an anchor jump would land the chapter heading UNDER
    it. scroll-padding-top reserves the header height plus a little air. */
 html{scroll-behavior:smooth;scroll-padding-top:112px}
-/* The header steps at 1074 (nav wraps), 881 and 433. Each step needs its own
-   reservation or chapter headings land under the bar — measured heights are
-   88.5 / 133 / 146 / 231, each plus ~24px of air. A single mobile value left
-   two broken bands. */
-@media (max-width:1073px){html{scroll-padding-top:160px}}
-@media (max-width:880px){html{scroll-padding-top:172px}}
-@media (max-width:432px){html{scroll-padding-top:256px}}
+/* Measured header steps are at 1074, 542, 433 and 345 — heights 88.5 / 146 /
+   184.5 / 214.5 / 231. Each step needs its own reservation or chapter headings
+   land under the sticky bar. Values are the height plus ~25px of air.
+   The 880 block is not a header step; it is harmless and kept only because the
+   wrapped-nav rules already gate there. */
+@media (max-width:1073px){html{scroll-padding-top:172px}}
+@media (max-width:541px){html{scroll-padding-top:210px}}
+@media (max-width:432px){html{scroll-padding-top:240px}}
+@media (max-width:344px){html{scroll-padding-top:256px}}
 body{
   font-family:var(--sans); background:var(--paper); color:var(--ink);
   font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
