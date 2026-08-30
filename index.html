@@ -122,11 +122,13 @@ header.mast{
 .wm-name{font-weight:800;letter-spacing:-.02em;font-size:20px;line-height:1.5;text-transform:uppercase}
 .wm-sub{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:2px;line-height:1.5}
 nav.ch-nav{display:flex;gap:28px;flex-wrap:wrap}
-/* The nav drops to its own row at 1073px, but the rule that gives that row its
-   hairline and padding lives in the 880px block — leaving a band where it floated
-   bare. 980 is the natural wrap point now that the wordmark reads "Ken Priore"
-   rather than the product name — it was 1073 when the lockup was 84px wider,
-   and holding the old value threw away 93px of usable width. */
+/* The nav shares the masthead row until it runs out of width, then takes a row of
+   its own with a hairline above it. This is the only copy of that rule; an
+   identical one sat in the 880px block until it was removed. 980 is the natural
+   wrap point now that the wordmark reads "Ken Priore" rather than the product
+   name — it was 1073 when the lockup was 84px wider, and holding the old value
+   threw away 93px of usable width. Measured: 981 is the last single-row width,
+   980 the first wrapped. */
 @media (max-width:980px){
   nav.ch-nav{width:100%;border-top:1px solid var(--line);padding-top:12px;gap:14px}
 }
