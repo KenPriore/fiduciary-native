@@ -242,9 +242,10 @@ input[type=range]:focus-visible{outline:2px solid var(--c-blue);outline-offset:4
 .pillars{border-top:1px solid var(--line);margin-top:6px;padding-top:13px}
 .pill-bar{display:flex;height:8px;border:2px solid var(--ink);margin-top:7px}
 .pill-bar span{display:block;background:var(--ink);transition:width calc(var(--beat)/2) var(--ease-snap)}
-/* the point of the chapter: this number moves and the verdict does not */
-.v-lock{font-size:12px;color:var(--muted);line-height:1.45;border-top:1px solid var(--line);margin-top:13px;padding-top:11px}
-.v-lock b{color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums}
+/* two axes. the title is the category and moves only with the capabilities;
+   this line is the product and moves with both. */
+.v-prod{border-top:1px solid var(--line);margin-top:13px;padding-top:11px}
+.v-prod p{font-size:14px;font-weight:800;letter-spacing:-.01em;line-height:1.3;margin-top:7px;color:var(--ink)}
 
 /* count of capabilities held, as a four-step meter */
 .meter{display:flex;gap:3px;margin-bottom:11px}
@@ -741,7 +742,10 @@ footer li a:hover{color:var(--hue);text-decoration:none}
         <div class="v-title" id="vTitle">Not adoptable</div>
         <p class="v-body" id="vBody">Fast, accurate, cheap, and unable to show its work. In legal, the unprovable work is the one that hurts.</p>
         <div class="v-meta" id="vMeta">Time to first audit failure: months, not years</div>
-        <div class="v-lock">Three pillars at <b id="vLockNum">85</b>. Category membership is set by the four capabilities alone.</div>
+        <div class="v-prod">
+          <div class="kicker">The product you built</div>
+          <p id="vProd">Teams will pilot this and quietly stop.</p>
+        </div>
       </div>
     </section>
 
@@ -1056,7 +1060,26 @@ const GATES = [
     meta:'Time to first audit failure: not expected' }
 ];
 
-function renderGate(){
+/* Two axes, deliberately independent.
+   The CATEGORY (title, colour, meter) is set by the four capabilities alone.
+   The PRODUCT line responds to both, so every slider drag has an answer
+   without the category pretending to depend on speed, accuracy or cost.
+   rows = pillar band (weak / mixed / strong), cols = provable (no / yes). */
+const PRODUCT = [
+  ['Nothing here to adopt.',                            'Defensible and too slow to reach for.'],
+  ['It will lose to something faster with the same blind spot.', 'It will hold once someone chooses it.'],
+  ['Teams will pilot this and quietly stop.',            'Teams will pilot this and keep it.']
+];
+
+function pillarScore(){
+  return Math.round((+sliders.fast.value + +sliders.acc.value + +sliders.chp.value) / 3);
+}
+
+function render(){
+  const p = pillarScore();
+  $('#vPillars').textContent = p;
+  $('#pillBar').style.width = p + '%';
+
   const n = caps.filter(c => c.checked).length;
   const g = GATES[n];
   const v = $('#verdict');
@@ -1066,24 +1089,19 @@ function renderGate(){
   $('#vMeta').textContent = g.meta;
   $$('#caps .chk').forEach(l => l.classList.toggle('on', l.querySelector('input').checked));
   $$('#meter span').forEach((s,i) => s.dataset.on = i < n ? '1' : '0');
+
+  const band = p < 40 ? 0 : p < 70 ? 1 : 2;
+  $('#vProd').textContent = PRODUCT[band][n >= 3 ? 1 : 0];
 }
-caps.forEach(c => c.addEventListener('change', renderGate));
-// the three pillars composite. it moves; the verdict does not. that is the
-// chapter's argument, so the number is shown rather than left implicit.
-function renderPillars(){
-  const v = Math.round((+sliders.fast.value + +sliders.acc.value + +sliders.chp.value) / 3);
-  $('#vPillars').textContent = v;
-  $('#vLockNum').textContent = v;
-  $('#pillBar').style.width = v + '%';
-}
+const renderGate = render;
+caps.forEach(c => c.addEventListener('change', render));
 Object.keys(sliders).forEach(k => {
   sliders[k].addEventListener('input', () => {
     outs[k].textContent = sliders[k].value;
-    renderPillars();
+    render();
   });
 });
-renderPillars();
-renderGate();
+render();
 
 /* ── 3. Timeline ── */
 const ERAS = [
