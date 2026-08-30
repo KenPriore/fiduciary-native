@@ -66,7 +66,13 @@
 /* The masthead is sticky, so an anchor jump would land the chapter heading UNDER
    it. scroll-padding-top reserves the header height plus a little air. */
 html{scroll-behavior:smooth;scroll-padding-top:112px}
-@media (max-width:940px){html{scroll-padding-top:210px}}
+/* The header steps at 1074 (nav wraps), 881 and 433. Each step needs its own
+   reservation or chapter headings land under the bar — measured heights are
+   88.5 / 133 / 146 / 231, each plus ~24px of air. A single mobile value left
+   two broken bands. */
+@media (max-width:1073px){html{scroll-padding-top:160px}}
+@media (max-width:880px){html{scroll-padding-top:172px}}
+@media (max-width:432px){html{scroll-padding-top:256px}}
 body{
   font-family:var(--sans); background:var(--paper); color:var(--ink);
   font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
@@ -116,6 +122,13 @@ header.mast{
 .wm-name{font-weight:800;letter-spacing:-.02em;font-size:20px;line-height:1.5;text-transform:uppercase}
 .wm-sub{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:2px;line-height:1.5}
 nav.ch-nav{display:flex;gap:28px;flex-wrap:wrap}
+/* The nav drops to its own row at 1073px, but the rule that gives that row its
+   hairline and padding lives in the 880px block — leaving a band where it floated
+   bare. Restated here at the real wrap point; the copy inside @880 is now
+   redundant and can be deleted on the next pass through that block. */
+@media (max-width:1073px){
+  nav.ch-nav{width:100%;border-top:1px solid var(--line);padding-top:12px;gap:14px}
+}
 nav.ch-nav a{
   font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--ink);border-bottom:2px solid transparent;padding-bottom:3px;
