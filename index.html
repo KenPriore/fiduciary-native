@@ -63,7 +63,10 @@
 [data-hue="rose"]   {--hue:var(--ill-rose)}
 
 *{margin:0;padding:0;box-sizing:border-box;border-radius:0 !important}
-html{scroll-behavior:smooth}
+/* The masthead is sticky, so an anchor jump would land the chapter heading UNDER
+   it. scroll-padding-top reserves the header height plus a little air. */
+html{scroll-behavior:smooth;scroll-padding-top:112px}
+@media (max-width:940px){html{scroll-padding-top:210px}}
 body{
   font-family:var(--sans); background:var(--paper); color:var(--ink);
   font-size:16px; line-height:1.5; -webkit-font-smoothing:antialiased;
@@ -101,12 +104,18 @@ header.mast{
   border-bottom:4px solid var(--line-firm);
 }
 /* longhand only — the shorthand would zero .container's horizontal inset */
-.mast-in{display:flex;align-items:center;gap:20px;padding-top:16px;padding-bottom:16px;flex-wrap:wrap}
-.wm{display:flex;align-items:center;gap:12px;margin-right:auto}
-.wm svg{width:30px;height:30px;flex:none}
-.wm-name{font-weight:800;letter-spacing:-.01em;font-size:15px;line-height:1.1;text-transform:uppercase}
-.wm-sub{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:3px}
-nav.ch-nav{display:flex;gap:20px;flex-wrap:wrap}
+/* Masthead geometry is the family spec, shared with kenpriore.com, kenpriore.ai
+   and the resume: 18px inner padding, 34px mark, 14px gap, 20px/-0.02em wordmark
+   at 1.5 leading, 11px sub-line 2px beneath. Resolves to 88.5px on every property
+   so page content starts at the same y when a reader crosses between them.
+   The sub-line's leading is pinned because inheriting a page's body ratio is what
+   drifted the lab's header by half a pixel. */
+.mast-in{display:flex;align-items:center;gap:20px;padding-top:18px;padding-bottom:18px;flex-wrap:wrap}
+.wm{display:flex;align-items:center;gap:14px;margin-right:auto}
+.wm svg{width:34px;height:34px;flex:none}
+.wm-name{font-weight:800;letter-spacing:-.02em;font-size:20px;line-height:1.5;text-transform:uppercase}
+.wm-sub{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);margin-top:2px;line-height:1.5}
+nav.ch-nav{display:flex;gap:28px;flex-wrap:wrap}
 nav.ch-nav a{
   font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--ink);border-bottom:2px solid transparent;padding-bottom:3px;
