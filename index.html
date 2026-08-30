@@ -738,7 +738,7 @@ footer li a:hover{color:var(--hue);text-decoration:none}
 
       <div class="verdict" id="verdict" data-state="closed">
         <div class="meter" id="meter" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-        <!-- static fallback, mirrors GATES[0]. renderGate() overwrites it on load. -->
+        <!-- static fallback, mirrors GATES[0]. render() overwrites it on load. -->
         <div class="v-title" id="vTitle">Not adoptable</div>
         <p class="v-body" id="vBody">Fast, accurate, cheap, and unable to show its work. In legal, the unprovable work is the one that hurts.</p>
         <div class="v-meta" id="vMeta">Time to first audit failure: months, not years</div>
@@ -1093,7 +1093,6 @@ function render(){
   const band = p < 40 ? 0 : p < 70 ? 1 : 2;
   $('#vProd').textContent = PRODUCT[band][n >= 3 ? 1 : 0];
 }
-const renderGate = render;
 caps.forEach(c => c.addEventListener('change', render));
 Object.keys(sliders).forEach(k => {
   sliders[k].addEventListener('input', () => {
